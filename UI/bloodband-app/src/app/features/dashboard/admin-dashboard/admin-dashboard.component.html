@@ -1,0 +1,140 @@
+<div class="dashboard-viewport">
+
+  <!-- ✅ HEADER -->
+  <header class="page-title-header">
+    <h1>Portal Dashboard</h1>
+
+    <button mat-raised-button class="brand-bg-primary action-btn">
+      <mat-icon>calendar_today</mat-icon>
+      Schedule Donation
+    </button>
+  </header>
+
+  <!-- ✅ TOP CARDS -->
+  <div class="metrics-grid-layout">
+
+    <!-- ✅ APPOINTMENT CARD -->
+    <mat-card class="appointment-card brand-bg-primary">
+      <mat-card-content>
+        <div class="card-header-actions">
+          <span class="badge">Next Donation Appointment</span>
+          <button mat-icon-button>
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </div>
+
+        <h2 class="appt-date">May 25, 2026</h2>
+
+        <p class="appt-time">
+          <mat-icon>access_time</mat-icon> 5:00 PM
+        </p>
+
+        <p class="appt-location">
+          <mat-icon>place</mat-icon> Blood Bank Center
+        </p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- ✅ TOTAL DONATIONS -->
+    <mat-card class="stat-mini-card">
+      <mat-card-content>
+        <div class="card-header-actions">
+          <div class="icon-indicator brand-bg-primary-light">
+            <mat-icon class="brand-text-primary">opacity</mat-icon>
+          </div>
+        </div>
+
+        <div class="stat-value">
+          {{ dashboardData?.totalDonations || '15,979' }}
+        </div>
+
+        <div class="stat-label">Total Donations</div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- ✅ PROGRESS CARD -->
+    <mat-card class="progress-indicator-card">
+      <mat-card-content>
+
+        <h3>Progress Rate</h3>
+
+        <div class="progress-metric-row">
+          <div class="label-box">
+            <mat-icon class="brand-text-primary">favorite</mat-icon>
+            <span>Blood Rate</span>
+          </div>
+
+          <mat-progress-bar value="80"></mat-progress-bar>
+        </div>
+
+        <div class="progress-metric-row">
+          <div class="label-box">
+            <mat-icon class="brand-text-primary">opacity</mat-icon>
+            <span>Donation Rate</span>
+          </div>
+
+          <mat-progress-bar value="60"></mat-progress-bar>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+  <!-- ✅ BOTTOM SECTION -->
+  <div class="workspace-grid-layout">
+
+    <!-- ✅ TABLE -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Donation History</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <table mat-table [dataSource]="dataSource">
+
+          <!-- ✅ NAME -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="table-user-cell">
+                <span class="avatar-initials">{{element.initials}}</span>
+                {{element.name}}
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- ✅ DATE -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef> Date </th>
+            <td mat-cell *matCellDef="let element">{{element.date}}</td>
+          </ng-container>
+
+          <!-- ✅ DRAW DATE -->
+          <ng-container matColumnDef="drawDate">
+            <th mat-header-cell *matHeaderCellDef> Draw Date </th>
+            <td mat-cell *matCellDef="let element">{{element.drawDate}}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- ✅ MAP -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Community Map</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="map-container">
+        <mat-icon>map</mat-icon>
+        <span>Map Placeholder</span>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+</div>

@@ -1,0 +1,32 @@
+.app-header-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 0 12px; 
+  height: 52px; // Slightly decreased height for a sleeker dashboard profile
+}
+
+.logo-wrapper-frame {
+  display: flex;
+  align-items: center;
+  gap: 6px; // Tightly links your logo graphic to the textual title string
+  margin-left: -4px; // Perfectly aligns edge-to-edge with the collapsed menu icon
+}
+
+.brand-logo-img {
+  height: 28px; // Scaled slightly down to maintain clean vertical inline padding
+  width: 28px;
+  object-fit: contain;
+}
+
+.brand-title-text {
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}

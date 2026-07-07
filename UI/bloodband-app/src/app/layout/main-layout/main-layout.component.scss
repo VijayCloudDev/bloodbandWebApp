@@ -1,0 +1,48 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; // Forces viewport boundary constraints
+  overflow: hidden;
+}
+
+.sidenav-container {
+  flex: 1;
+  height: calc(100vh - 52px); // Adapts directly to your minimal header profile
+}
+
+.app-sidebar {
+  width: 200px;
+  border-right: 1px solid #e0e0e0;
+  background-color: var(--app-white);
+  overflow: hidden !important;
+}
+
+// ── FIXED STRUCTURAL BLOCK FOR FOOTER ALIGNMENT ──
+.main-content-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto !important; // Moves scrolling to this frame container!
+  background-color: var(--app-gray-bg);
+}
+
+.router-viewport-box {
+  flex: 1 0 auto; // Prevents the dashboard content from getting squished by the footer
+  padding: 24px 24px 24px 32px;
+}
+
+// Global footer element behavior control
+app-footer {
+  flex-shrink: 0; // Guarantees the footer maintains its structure at the bottom boundary
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .app-sidebar {
+    width: 240px;
+  }
+
+  .router-viewport-box {
+    padding: 16px; // Compact spaces on tight phone viewports
+  }
+}

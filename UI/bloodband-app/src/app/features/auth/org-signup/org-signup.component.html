@@ -1,0 +1,207 @@
+<div class="registration-layout-wrapper">
+  <div class="auth-card-container wizard-card-layout">
+    
+    <!-- Branding Header -->
+    <div class="form-brand-header">
+      <img src="assets/logo_36.png" alt="Bloodband Logo" />
+      <h2>Bloodband Portal</h2>
+    </div>
+
+    <div class="auth-form-layout text-left">
+      <h3 class="form-panel-heading">Register Facility Node</h3>
+      <p class="tab-instruction-text">Complete the verification sequence to list your medical workspace on the framework network.</p>
+      
+      <!-- Integrated Multi-Step Form Execution Engine -->
+      <form [formGroup]="adminSignUpForm" (ngSubmit)="onAdminSignUpSubmit()">
+        <mat-stepper linear #stepper class="custom-horizontal-stepper">
+          
+          <!-- STEP 1: GENERAL PROFILE DETAILS -->
+          <mat-step [stepControl]="identityGroup" label="Identity">
+            <div class="step-content-box animate-fade-in" formGroupName="identity">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Organization Name</mat-label>
+                <input matInput type="text" formControlName="name" [errorStateMatcher]="matcher" placeholder="e.g. City Central Red Cross Bank">
+                <mat-icon matSuffix>business</mat-icon>
+                <mat-error *ngIf="identityGroup.get('name')?.hasError('required')">
+                  Organization name is required.
+                </mat-error>
+                <mat-error *ngIf="identityGroup.get('name')?.hasError('minlength')">
+                  Name must be at least 3 characters long.
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Brief Description / Mission Scope</mat-label>
+                <textarea matInput formControlName="description" rows="3" placeholder="Describe facility operations context..."></textarea>
+              </mat-form-field>
+
+              <div class="stepper-action-row">
+                <span class="spacer"></span>
+                <button mat-flat-button color="primary" type="button" (click)="validateStep(identityGroup, stepper)">
+                  Continue
+                </button>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- STEP 2: REGULATORY COMPLIANCE -->
+          <mat-step [stepControl]="complianceGroup" label="Compliance">
+            <div class="step-content-box animate-fade-in" formGroupName="compliance">
+              <div class="form-grid-row-2">
+                <mat-form-field appearance="outline">
+                  <mat-label>Registration Number</mat-label>
+                  <input matInput type="text" formControlName="registrationNumber" [errorStateMatcher]="matcher">
+                  <mat-error *ngIf="complianceGroup.get('registrationNumber')?.hasError('required')">Registration number is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Registration Framework Type</mat-label>
+                  <input matInput type="text" formControlName="registrationType" [errorStateMatcher]="matcher" placeholder="e.g. NGO / Gov Trust / Private">
+                  <mat-error *ngIf="complianceGroup.get('registrationType')?.hasError('required')">Framework type is required.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-grid-row-2">
+                <mat-form-field appearance="outline">
+                  <mat-label>Registration Inception Date</mat-label>
+                  <input matInput [matDatepicker]="regPicker" formControlName="registrationDate" [errorStateMatcher]="matcher" placeholder="Choose a date">
+                  <mat-datepicker-toggle matIconSuffix [for]="regPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #regPicker></mat-datepicker>
+                  <mat-error *ngIf="complianceGroup.get('registrationDate')?.hasError('required')">Inception date is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Medical License Number</mat-label>
+                  <input matInput type="text" formControlName="licenseNumber" [errorStateMatcher]="matcher">
+                  <mat-error *ngIf="complianceGroup.get('licenseNumber')?.hasError('required')">License number is required.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Licensing Authority / Issued By</mat-label>
+                <input matInput type="text" formControlName="licenseIssuedBy" [errorStateMatcher]="matcher" placeholder="e.g. Directorate of Health Services">
+                <mat-error *ngIf="complianceGroup.get('licenseIssuedBy')?.hasError('required')">Licensing authority is required.</mat-error>
+              </mat-form-field>
+
+              <div class="stepper-action-row">
+                <button mat-button type="button" matStepperPrevious>Back</button>
+                <button mat-flat-button color="primary" type="button" (click)="validateStep(complianceGroup, stepper)">
+                  Continue
+                </button>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- STEP 3: GEOGRAPHIC PARAMETERS -->
+          <mat-step [stepControl]="locationGroup" label="Location">
+            <div class="step-content-box animate-fade-in" formGroupName="location">
+              <div class="form-grid-row-3">
+                <mat-form-field appearance="outline">
+                  <mat-label>Country</mat-label>
+                  <mat-select formControlName="countryId" [errorStateMatcher]="matcher">
+                    <mat-option [value]="1">India</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="locationGroup.get('countryId')?.hasError('required')">Country selection is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>State</mat-label>
+                  <mat-select formControlName="stateId" [errorStateMatcher]="matcher">
+                    <mat-option [value]="10">Kerala</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="locationGroup.get('stateId')?.hasError('required')">State selection is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>District</mat-label>
+                  <mat-select formControlName="districtId" [errorStateMatcher]="matcher">
+                    <mat-option [value]="101">Thiruvananthapuram</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="locationGroup.get('districtId')?.hasError('required')">District selection is required.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-grid-row-2">
+                <mat-form-field appearance="outline">
+                  <mat-label>Specific Location / Place</mat-label>
+                  <input matInput type="text" formControlName="place" [errorStateMatcher]="matcher" placeholder="e.g. Medical College Junction">
+                  <mat-error *ngIf="locationGroup.get('place')?.hasError('required')">Location place is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Postal Pincode</mat-label>
+                  <input matInput type="text" formControlName="pincode" [errorStateMatcher]="matcher" maxlength="6" placeholder="e.g. 695011">
+                  <mat-error *ngIf="locationGroup.get('pincode')?.hasError('required')">Postal pincode is required.</mat-error>
+                  <mat-error *ngIf="locationGroup.get('pincode')?.hasError('pattern')">Must be exactly 6 numeric digits.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="stepper-action-row">
+                <button mat-button type="button" matStepperPrevious>Back</button>
+                <button mat-flat-button color="primary" type="button" (click)="validateStep(locationGroup, stepper)">
+                  Continue
+                </button>
+              </div>
+            </div>
+          </mat-step>
+
+          <!-- STEP 4: COMMUNICATION & CREDENTIALS -->
+          <mat-step [stepControl]="securityGroup" label="Security">
+            <div class="step-content-box animate-fade-in" formGroupName="security">
+              <div class="form-grid-row-2">
+                <mat-form-field appearance="outline">
+                  <mat-label>Primary Contact Phone</mat-label>
+                  <input matInput type="tel" formControlName="phoneNumber" [errorStateMatcher]="matcher" maxlength="10">
+                  <mat-icon matSuffix>phone</mat-icon>
+                  <mat-error *ngIf="securityGroup.get('phoneNumber')?.hasError('required')">Contact number is required.</mat-error>
+                  <mat-error *ngIf="securityGroup.get('phoneNumber')?.hasError('pattern')">Must be exactly 10 numeric digits.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Public Support Email ID</mat-label>
+                  <input matInput type="email" formControlName="email" [errorStateMatcher]="matcher">
+                  <mat-icon matSuffix>mail_outline</mat-icon>
+                  <mat-error *ngIf="securityGroup.get('email')?.hasError('required')">Email address is required.</mat-error>
+                  <mat-error *ngIf="securityGroup.get('email')?.hasError('email')">Please input a valid email layout format.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-grid-row-2">
+                <mat-form-field appearance="outline">
+                  <mat-label>System Password</mat-label>
+                  <input matInput type="password" formControlName="password" [errorStateMatcher]="matcher">
+                  <mat-error *ngIf="securityGroup.get('password')?.hasError('required')">System password is required.</mat-error>
+                  <mat-error *ngIf="securityGroup.get('password')?.hasError('minlength')">Password must be at least 6 characters long.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Confirm Password</mat-label>
+                  <input matInput type="password" formControlName="confirmPassword" [errorStateMatcher]="matcher">
+                  <mat-error *ngIf="securityGroup.get('confirmPassword')?.hasError('required')">Confirmation password is required.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="stepper-action-row submission-row">
+                <button mat-button type="button" matStepperPrevious [disabled]="loading">Back</button>
+                <button mat-flat-button class="brand-bg-primary submit-btn" [disabled]="loading">
+                  Deploy Infrastructure Node
+                </button>
+              </div>
+            </div>
+          </mat-step>
+
+        </mat-stepper>
+      </form>
+
+      <p class="alternate-view-text">
+        <a (click)="navigateToLogin()">Return to Sign In</a>
+      </p>
+    </div>
+
+    <!-- Error Alert Box Wrapper Component -->
+    <div class="error-alert-wrapper" *ngIf="error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error }}</span>
+    </div>
+  </div>
+</div>

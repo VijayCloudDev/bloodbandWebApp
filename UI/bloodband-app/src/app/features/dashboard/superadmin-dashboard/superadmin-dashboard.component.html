@@ -1,0 +1,321 @@
+<div class="superadmin-viewport">
+  <!-- 🏷️ HEADER SECTION -->
+  <header class="page-title-header">
+    <h1>Super Admin Workspace</h1>
+    <div class="header-actions">
+      <button
+        mat-raised-button
+        class="brand-bg-primary action-btn"
+        (click)="openAdManager()"
+      >
+        <mat-icon>campaign</mat-icon>
+        New Advertisement
+      </button>
+    </div>
+  </header>
+
+  <!-- 🏷️ HIGH-DENSITY KPI SUMMARY GRID -->
+  <div class="kpi-summary-grid">
+    <mat-card class="stat-kpi-card status-active">
+      <mat-card-content>
+        <div class="kpi-header">
+          <span>Active / Total Orgs</span><mat-icon>business</mat-icon>
+        </div>
+        <div class="kpi-value">
+          {{ stats?.activeOrgs ?? 0 }} / {{ stats?.totalOrgs ?? 0 }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-kpi-card status-pending">
+      <mat-card-content>
+        <div class="kpi-header">
+          <span>Pending Ingestions</span><mat-icon>hourglass_empty</mat-icon>
+        </div>
+        <div class="kpi-value">{{ stats?.pendingOrgs ?? 0 }}</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-kpi-card status-suspended">
+      <mat-card-content>
+        <div class="kpi-header">
+          <span>Suspended Orgs</span><mat-icon>block</mat-icon>
+        </div>
+        <div class="kpi-value">{{ stats?.suspendedOrgs ?? 0 }}</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-kpi-card status-expired">
+      <mat-card-content>
+        <div class="kpi-header">
+          <span>Expired Contracts</span><mat-icon>history</mat-icon>
+        </div>
+        <div class="kpi-value">{{ stats?.expiredOrgs ?? 0 }}</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-kpi-card type-users">
+      <mat-card-content>
+        <div class="kpi-header">
+          <span>Active / Total Users</span><mat-icon>people</mat-icon>
+        </div>
+        <div class="kpi-value">
+          {{ stats?.activeUsers ?? 0 }} / {{ stats?.totalUsers ?? 0 }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- 🏷️ ANALYTICS MAPS & ACTION TRIGGERS -->
+  <div class="analytics-section-grid">
+    <!-- Subscription Plans Linear Matrix Breakdown -->
+    <mat-card class="progress-indicator-card">
+      <mat-card-header
+        ><mat-card-title
+          >Subscription & Licensing Statistics</mat-card-title
+        ></mat-card-header
+      >
+      <mat-card-content>
+        <div class="progress-metric-row" *ngFor="let plan of planStats">
+          <div class="metric-label-row">
+            <span>{{ plan.name }}</span>
+            <span>{{ plan.count }} Orgs ({{ plan.percentage }}%)</span>
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="plan.percentage"
+            class="brand-bg-primary-light"
+          ></mat-progress-bar>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Quick Tool Action Shortcuts -->
+    <mat-card>
+      <mat-card-header
+        ><mat-card-title
+          >Administrative Controls</mat-card-title
+        ></mat-card-header
+      >
+      <mat-card-content>
+        <div class="quick-actions-panel">
+          <button
+            mat-stroked-button
+            color="primary"
+            class="quick-btn"
+            (click)="routeTo('orgs')"
+          >
+            <mat-icon>corporate_fare</mat-icon>Review Organizations
+          </button>
+          <button
+            mat-stroked-button
+            color="primary"
+            class="quick-btn"
+            (click)="routeTo('users')"
+          >
+            <mat-icon>manage_accounts</mat-icon>User Access Control
+          </button>
+          <button
+            mat-stroked-button
+            color="accent"
+            class="quick-btn"
+            (click)="routeTo('billing')"
+          >
+            <mat-icon>credit_card</mat-icon>Licensing & Tariffs
+          </button>
+          <button
+            mat-stroked-button
+            color="warn"
+            class="quick-btn"
+            (click)="routeTo('security')"
+          >
+            <mat-icon>security</mat-icon>System Controls
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- 🏷️ ADVERTISEMENTS & REGIONAL METRICS AREA -->
+  <div class="analytics-section-grid">
+    <!-- Advertisement Performance Rollout Grid -->
+    <!-- Advertisement Performance Rollout Grid -->
+    <mat-card class="progress-indicator-card">
+      <mat-card-header
+        ><mat-card-title
+          >Advertisement Matrix Performance</mat-card-title
+        ></mat-card-header
+      >
+      <mat-card-content>
+        <div class="progress-metric-row">
+          <!-- Changed adStats?.active to adStats.active -->
+          <div class="metric-label-row">
+            <span>Active Broadcasts</span><span>{{ adStats.active }}</span>
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="calcAdPercent(adStats.active)"
+            color="primary"
+          ></mat-progress-bar>
+        </div>
+        <div class="progress-metric-row">
+          <!-- Changed adStats?.scheduled to adStats.scheduled -->
+          <div class="metric-label-row">
+            <span>Scheduled Queues</span><span>{{ adStats.scheduled }}</span>
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="calcAdPercent(adStats.scheduled)"
+            color="accent"
+          ></mat-progress-bar>
+        </div>
+        <div class="progress-metric-row">
+          <!-- Changed adStats?.expired to adStats.expired -->
+          <div class="metric-label-row">
+            <span>Expired Broadcasts</span><span>{{ adStats.expired }}</span>
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="calcAdPercent(adStats.expired)"
+            color="warn"
+          ></mat-progress-bar>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Geographic Organization Breakdown Matrix -->
+    <mat-card class="progress-indicator-card">
+      <mat-card-header
+        ><mat-card-title
+          >Regional Ingestion Distribution</mat-card-title
+        ></mat-card-header
+      >
+      <mat-card-content>
+        <div class="progress-metric-row" *ngFor="let region of regionalStats">
+          <div class="metric-label-row">
+            <span>{{ region.districtName }}</span
+            ><span>{{ region.count }} Orgs</span>
+          </div>
+          <mat-progress-bar
+            mode="determinate"
+            [value]="region.percentage"
+          ></mat-progress-bar>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- 🏷️ MANAGEMENT INTERFACES & AUDIT TRACKING TABLES -->
+  <div class="management-table-layout">
+    <!-- Recent Ingestion Log Table Component[cite: 19]-->
+    <mat-card class="table-card">
+      <mat-card-header
+        ><mat-card-title
+          >Recent Onboarding Submissions</mat-card-title
+        ></mat-card-header
+      >
+      <mat-card-content>
+        <table mat-table [dataSource]="recentOrgsDataSource" class="w-full">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Organization</th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Registered On</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.date | date: "shortDate" }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">
+              <span
+                class="status-chip"
+                [ngClass]="element.status.toLowerCase()"
+                >{{ element.status }}</span
+              >
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="orgDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: orgDisplayedColumns"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Live Advertisement Distribution & Administration Matrix[cite: 19]-->
+    <mat-card class="table-card">
+      <mat-card-header
+        ><mat-card-title>Recent Campaigns</mat-card-title></mat-card-header
+      >
+      <mat-card-content>
+        <table mat-table [dataSource]="recentAdsDataSource" class="w-full">
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Placement Title</th>
+            <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Channel Status</th>
+            <td mat-cell *matCellDef="let element">
+              <span
+                class="status-chip"
+                [ngClass]="element.isActive ? 'active' : 'expired'"
+              >
+                {{ element.isActive ? "Active" : "Inactive" }}
+              </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="ad-actions-cell">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="editAd(element)"
+                  matTooltip="Edit Campaign"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  [color]="element.isActive ? 'warn' : 'accent'"
+                  (click)="toggleAd(element)"
+                  matTooltip="Toggle Visibility"
+                >
+                  <mat-icon>{{
+                    element.isActive ? "visibility_off" : "visibility"
+                  }}</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="adDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: adDisplayedColumns"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- 🏷️ CENTRAL AUDIT STREAM LOGS -->
+  <mat-card>
+    <mat-card-header
+      ><mat-card-title
+        >System Operations Audit Log</mat-card-title
+      ></mat-card-header
+    >
+    <mat-card-content>
+      <div class="audit-log-timeline">
+        <div class="audit-node" *ngFor="let log of auditLogs">
+          <span class="node-timestamp">{{
+            log.timestamp | date: "HH:mm:ss"
+          }}</span>
+          <span class="node-description"
+            ><strong>{{ log.operator }}</strong> {{ log.action }}</span
+          >
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,58 @@
+<!-- <mat-nav-list class="sidebar-nav-list">
+  <a mat-list-item routerLink="/dashboard" routerLinkActive="active-nav-item">
+    <mat-icon matListItemIcon class="brand-text-primary">dashboard</mat-icon>
+    <span matListItemTitle>Dashboard</span>
+  </a>
+  <a mat-list-item routerLink="/profile" routerLinkActive="active-nav-item">
+    <mat-icon matListItemIcon class="brand-text-primary">person</mat-icon>
+    <span matListItemTitle>Profile Settings</span>
+  </a>
+</mat-nav-list> -->
+
+<mat-nav-list class="sidebar-nav-list"> <!--[cite: 22] -->
+
+  <!-- 1. NAVIGATION ITEMS EXCLUSIVE TO SUPERADMINS -->
+  <ng-container *ngIf="userRole === 'SuperAdmin'">
+    <a mat-list-item routerLink="/super-admin-dashboard" routerLinkActive="active-nav-item"> <!--[cite: 22] -->
+      <mat-icon matListItemIcon class="brand-text-primary">space_dashboard</mat-icon> <!--[cite: 22] -->
+      <span matListItemTitle>Dashboard</span> <!--[cite: 22] -->
+    </a>
+    <a mat-list-item routerLink="/system-administration/orgs" routerLinkActive="active-nav-item">
+      <mat-icon matListItemIcon class="brand-text-primary">corporate_fare</mat-icon>
+      <span matListItemTitle>Org</span>
+    </a>
+    <a mat-list-item routerLink="/system-administration/users" routerLinkActive="active-nav-item">
+      <mat-icon matListItemIcon class="brand-text-primary">manage_accounts</mat-icon>
+      <span matListItemTitle>User</span>
+    </a>
+    <a mat-list-item routerLink="/advertisement-management" routerLinkActive="active-nav-item">
+      <mat-icon matListItemIcon class="brand-text-primary">campaign</mat-icon>
+      <span matListItemTitle>Ads</span>
+    </a>
+  </ng-container>
+
+  <!-- 2. NAVIGATION ITEMS EXCLUSIVE TO ADMINS -->
+  <ng-container *ngIf="userRole === 'Admin'">
+    <a mat-list-item routerLink="/admin-dashboard" routerLinkActive="active-nav-item">
+      <mat-icon matListItemIcon class="brand-text-primary">dashboard</mat-icon>
+      <span matListItemTitle>Admin Dashboard</span>
+    </a>
+  </ng-container>
+
+  <!-- 3. NAVIGATION ITEMS EXCLUSIVE TO STANDARD DONORS / USERS -->
+  <ng-container *ngIf="userRole === 'User'">
+    <a mat-list-item routerLink="/dashboard" routerLinkActive="active-nav-item"> <!--[cite: 22] -->
+      <mat-icon matListItemIcon class="brand-text-primary">dashboard</mat-icon> <!--[cite: 22] -->
+      <span matListItemTitle>Dashboard</span> <!--[cite: 22] -->
+    </a>
+  </ng-container>
+
+  <!-- ⚙️ 4. COMMON CORE SYSTEM CONTROLS AVAILABLE TO ALL ROLES -->
+  <hr class="sidebar-divider" *ngIf="userRole === 'SuperAdmin'" />
+  
+  <a mat-list-item routerLink="/profile" routerLinkActive="active-nav-item"> <!--[cite: 22] -->
+    <mat-icon matListItemIcon class="brand-text-primary">person</mat-icon> <!--[cite: 22] -->
+    <span matListItemTitle>Profile Settings</span> <!--[cite: 22] -->
+  </a>
+
+</mat-nav-list> <!--[cite: 22] -->

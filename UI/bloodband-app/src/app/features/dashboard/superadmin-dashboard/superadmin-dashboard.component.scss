@@ -1,0 +1,256 @@
+// ==========================================================================
+// 1. CORE COMPONENT STRUCTURAL VIEWPORT LAYOUT
+// ==========================================================================
+.superadmin-viewport {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page-title-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 8px;
+
+  h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--app-text-dark);
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  .action-btn {
+    border-radius: 6px;
+    padding: 0 16px;
+    font-weight: 500;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+// ==========================================================================
+// 2. REUSABLE ATOM CARD OVERRIDES & BASE METRICS
+// ==========================================================================
+mat-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 12px !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+mat-card-content {
+  padding: 20px !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 8px 20px;
+  
+  mat-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+}
+
+// ==========================================================================
+// 3. KPI HIGH-DENSITY METRICS GRID
+// ==========================================================================
+.kpi-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.stat-kpi-card {
+  border-left: 4px solid #ccc;
+  
+  &.status-active     { border-left-color: #2e7d32; }
+  &.status-pending    { border-left-color: #ef6c00; }
+  &.status-suspended  { border-left-color: #c62828; }
+  &.status-expired    { border-left-color: #455a64; }
+  &.type-users        { border-left-color: #1565c0; }
+
+  .kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #666;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      opacity: 0.7;
+    }
+  }
+
+  .kpi-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--app-text-dark);
+    line-height: 1.1;
+  }
+}
+
+// ==========================================================================
+// 4. ANALYTICS WORKSPACE & SECTION LAYER ARRAYS
+// ==========================================================================
+.analytics-section-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1.4fr;
+  gap: 24px;
+}
+
+.progress-metric-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  
+  &:last-child { margin-bottom: 0; }
+
+  .metric-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #333;
+  }
+
+  mat-progress-bar {
+    border-radius: 4px;
+    height: 8px;
+  }
+}
+
+.quick-actions-panel {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+
+  .quick-btn {
+    height: 54px;
+    justify-content: flex-start;
+    font-weight: 500;
+    border-radius: 8px;
+    
+    mat-icon { margin-right: 8px; }
+  }
+}
+
+// ==========================================================================
+// 5. DATA MANAGEMENT DATASHEETS & HISTORY TABLES
+// ==========================================================================
+.management-table-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.table-card {
+  overflow: hidden;
+  mat-card-content { padding-top: 0 !important; }
+}
+
+.status-chip {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.active    { background-color: rgba(46, 125, 50, 0.1); color: #2e7d32; }
+  &.pending   { background-color: rgba(239, 108, 0, 0.1); color: #ef6c00; }
+  &.suspended { background-color: rgba(198, 40, 40, 0.1); color: #c62828; }
+}
+
+.audit-log-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.audit-node {
+  display: flex;
+  gap: 12px;
+  font-size: 0.85rem;
+  border-bottom: 1px dashed #eee;
+  padding-bottom: 8px;
+
+  &:last-child { border-bottom: none; }
+
+  .node-timestamp { color: #888; font-weight: 500; min-width: 65px; }
+  .node-description { color: #333; flex: 1; }
+}
+
+// ==========================================================================
+// 6. ADVERTISEMENT MANAGEMENT OVERLAYS
+// ==========================================================================
+.ad-actions-cell {
+  display: flex;
+  gap: 4px;
+  
+  button[mat-icon-button] {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// ==========================================================================
+// 7. MULTI-DEVICE RESPONSIVE BREAKPOINTS
+// ==========================================================================
+@media (max-width: 1024px) {
+  .analytics-section-grid,
+  .management-table-layout {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-title-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    
+    .header-actions { width: 100%; }
+    .action-btn { flex: 1; }
+  }
+
+  .quick-actions-panel {
+    grid-template-columns: 1fr;
+  }
+  
+  .table-card mat-card-content {
+    overflow-x: auto !important;
+    width: 100%;
+    
+    table { min-width: 550px; }
+  }
+}

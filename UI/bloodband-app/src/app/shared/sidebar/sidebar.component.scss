@@ -1,0 +1,37 @@
+.sidebar-nav-list {
+  padding-top: 8px !important;
+  overflow: hidden !important; // Prevents internal content from creating a scrollbar
+
+  a[mat-list-item] {
+    height: 38px !important; 
+    margin: 4px 8px;
+    border-radius: 6px;
+
+    ::v-deep .mdc-list-item__content {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important; 
+    }
+
+    ::v-deep .mdc-list-item__start {
+      margin-right: 0px !important; 
+      padding-right: 0px !important;
+    }
+  }
+
+  .active-nav-item {
+    background-color: rgba(153, 0, 0, 0.06) !important;
+    
+    span, mat-icon {
+      color: var(--app-primary) !important;
+      font-weight: 600;
+    }
+  }
+  // Retains all previous styles
+.sidebar-divider {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 12px 16px;
+  opacity: 0.6;
+}
+}

@@ -1,0 +1,126 @@
+<div class="login-layout-wrapper">
+  
+  <!-- Left Side: Creative Brand Hero Panel -->
+  <div class="brand-hero-panel">
+    <div class="fluid-drop-shape fluid-1"></div>
+    <div class="fluid-drop-shape fluid-2"></div>
+    <div class="hero-content">
+      <div class="logo-badge-container">
+        <img src="assets/logo_36.png" alt="Bloodband Logo" class="hero-logo" />
+      </div>
+      <h1 class="hero-title">Give the Gift of Life.</h1>
+      <p class="hero-subtitle">Every drop counts. Join our community of donors and administrators working together.</p>
+    </div>
+  </div>
+
+  <!-- Right Side: The Dynamic Form Panel -->
+  <div class="auth-form-panel">
+    <div class="auth-card-container">
+      
+      <div class="form-brand-header">
+        <img src="assets/logo_36.png" alt="Bloodband Logo" />
+        <h2>Bloodband Portal</h2>
+      </div>
+
+      <!-- VIEW MODULE 1: MAIN ROUTE TABS (LOGIN) -->
+      <div *ngIf="authMode === 'login'">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" class="auth-tabs">
+          
+          <!-- Donor Login Tab -->
+          <mat-tab label="Donor Portal">
+            <form [formGroup]="userForm" (ngSubmit)="onUserLogin()" class="auth-form-layout">
+              <p class="tab-instruction-text">Sign in using your registered smartphone number.</p>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Phone Number</mat-label>
+                <input matInput type="tel" formControlName="phoneNumber" maxlength="10">
+                <mat-icon matSuffix>phone</mat-icon>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+                <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+                  <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+              <div class="link-action-row">
+                <a class="form-navigation-link" (click)="switchMode('forgot')">Forgot Password?</a>
+              </div>
+              <button mat-flat-button class="brand-bg-primary full-width submit-btn" [disabled]="loading">Sign In as Donor</button>
+              <p class="alternate-view-text">New to Bloodband? <a (click)="switchMode('signup')">Create Donor Account</a></p>
+            </form>
+          </mat-tab>
+
+          <!-- Administration Tab -->
+          <mat-tab label="Administration">
+            <form [formGroup]="adminForm" (ngSubmit)="onAdminLogin()" class="auth-form-layout">
+              <p class="tab-instruction-text">Authorized internal Admin and Superadmin email channel.</p>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Administrative Email ID</mat-label>
+                <input matInput type="email" formControlName="email">
+                <mat-icon matSuffix>mail_outline</mat-icon>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+                <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+                  <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+              <div class="link-action-row">
+                <a class="form-navigation-link" (click)="switchMode('admin-forgot')">Forgot Admin Password?</a>
+              </div>
+            <button mat-flat-button class="brand-bg-primary full-width submit-btn" [disabled]="loading">Administrative Access</button>
+<p class="alternate-view-text">Managing a Blood Bank? <a (click)="navigateToOrgRegistration()">Register Organization</a></p>
+            </form>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
+      <!-- VIEW MODULE 2: DONOR REGISTRATION -->
+      <div *ngIf="authMode === 'signup'" class="auth-form-layout text-left animate-fade-in">
+        <h3 class="form-panel-heading">Donor Registration</h3>
+        <form [formGroup]="signUpForm" (ngSubmit)="onSignUpSubmit()">
+          <mat-form-field appearance="outline" class="full-width"><mat-label>Full Name</mat-label><input matInput type="text" formControlName="fullName"></mat-form-field>
+          <mat-form-field appearance="outline" class="full-width"><mat-label>Phone Number</mat-label><input matInput type="tel" formControlName="phoneNumber" maxlength="10"></mat-form-field>
+          <mat-form-field appearance="outline" class="full-width"><mat-label>Email ID (Optional)</mat-label><input matInput type="email" formControlName="emailId"></mat-form-field>
+          <mat-form-field appearance="outline" class="full-width"><mat-label>Password</mat-label><input matInput type="password" formControlName="password"></mat-form-field>
+          <mat-form-field appearance="outline" class="full-width"><mat-label>Confirm Password</mat-label><input matInput type="password" formControlName="confirmPassword"></mat-form-field>
+          <button mat-flat-button class="brand-bg-primary full-width submit-btn">Register Account</button>
+          <p class="alternate-view-text"><a (click)="switchMode('login')">Return to Sign In</a></p>
+        </form>
+      </div>
+
+      <!-- VIEW MODULE 3: DONOR FORGOT PASSWORD -->
+      <div *ngIf="authMode === 'forgot'" class="auth-form-layout text-left animate-fade-in">
+        <h3 class="form-panel-heading">Recover Password</h3>
+        <form [formGroup]="forgotPasswordForm" (ngSubmit)="onForgotPasswordSubmit()">
+          <mat-form-field appearance="outline" class="full-width"><mat-label>Registered Phone Number</mat-label><input matInput type="tel" formControlName="phoneNumber" maxlength="10"></mat-form-field>
+          <button mat-flat-button class="brand-bg-primary full-width submit-btn">Send Reset Token</button>
+          <p class="alternate-view-text"><a (click)="switchMode('login')">Return to Sign In</a></p>
+        </form>
+      </div>
+
+      <!-- NEW VIEW MODULE 5: ADMIN EMAIL FORGOT PASSWORD -->
+      <div *ngIf="authMode === 'admin-forgot'" class="auth-form-layout text-left animate-fade-in">
+        <h3 class="form-panel-heading">Recover Administrative Password</h3>
+        <p class="tab-instruction-text">Provide your official corporate access email address below to receive encrypted recovery link sequences.</p>
+        <form [formGroup]="adminForgotForm" (ngSubmit)="onAdminForgotSubmit()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Administrative Email Address</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="name@bloodbank.org">
+            <mat-icon matSuffix>mail_outline</mat-icon>
+          </mat-form-field>
+          <button mat-flat-button class="brand-bg-primary full-width submit-btn" [disabled]="loading">Transmit Recovery Mail</button>
+          <p class="alternate-view-text"><a (click)="switchMode('login')">Return to Sign In</a></p>
+        </form>
+      </div>
+
+      <!-- Global Error Message Box -->
+      <div class="error-alert-wrapper" *ngIf="error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error }}</span>
+      </div>
+
+    </div>
+  </div>
+</div>

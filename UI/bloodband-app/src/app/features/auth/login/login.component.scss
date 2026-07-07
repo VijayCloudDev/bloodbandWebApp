@@ -1,0 +1,400 @@
+// ==========================================================================
+// 1. GLOBAL SPLIT-SCREEN LAYOUT ARCHITECTURE
+// ==========================================================================
+.login-layout-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: var(--app-white);
+  overflow: hidden;
+
+  // Stacks the panels vertically into a single column on mobile/tablet views
+  @media (max-width: 960px) {
+    flex-direction: column;
+  }
+}
+
+// ==========================================================================
+// 2. CREATIVE BRAND HERO PANEL (LEFT PANEL)
+// ==========================================================================
+.brand-hero-panel {
+  flex: 1.2; // Spans across slightly more than half the screen on desktops
+  background: linear-gradient(135deg, var(--app-primary) 0%, #4a0000 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  overflow: hidden;
+  color: var(--app-white);
+
+  @media (max-width: 960px) {
+    flex: none;
+    padding: 60px 24px;
+    
+    // Hides organic fluid shapes on tiny viewports to preserve clean layout spaces
+    .fluid-drop-shape { display: none; }
+  }
+}
+
+// Organic CSS "Blood Drop" Background Elements
+.fluid-drop-shape {
+  position: absolute;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  animation: morph 8s ease-in-out infinite both alternate;
+}
+
+.fluid-1 {
+  width: 600px;
+  height: 600px;
+  top: -10%;
+  left: -10%;
+  transform: rotate(45deg);
+}
+
+.fluid-2 {
+  width: 400px;
+  height: 400px;
+  bottom: -5%;
+  right: -5%;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
+  animation-delay: 2s;
+}
+
+@keyframes morph {
+  0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+  100% { border-radius: 60% 40% 30% 70% / 60% 30% 70 40%; }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 480px;
+  text-align: center;
+
+  // Circular white badge structure that cleanly isolates your logo asset graphic
+  .logo-badge-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 0px;
+    height: 0px;
+    background-color: var(--app-white);
+    border-radius: 50%;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    margin-bottom: 32px;
+  }
+
+  .hero-logo {
+    height: 120px;
+    width: 180px;
+    object-fit: contain;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -1px;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+  }
+}
+
+// ==========================================================================
+// 3. AUTHENTICATION FORM WORKSPACE (RIGHT PANEL)
+// ==========================================================================
+.auth-form-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--app-white);
+  padding: 24px;
+}
+
+.auth-card-container {
+  width: 100%;
+  max-width: 420px; 
+  padding: 32px;
+  background: transparent;
+
+  // Expanded configurations for signup tasks/grids
+  & {
+    max-width: 480px !important;
+  }
+
+  @media (max-width: 600px) {
+    padding: 16px;
+  }
+}
+
+// Displays a beautiful, classic branding section above the forms on ALL screens
+.form-brand-header {
+  display: flex;
+  flex-direction: row; // Keeps logo and text side-by-side on desktop
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px; // Creates elegant breathing room above the tabs
+  border-bottom: 1px solid #f0f0f0; // Subtle clean separator line
+  padding-bottom: 16px;
+  padding-left: 60px;
+
+  img {
+    height: 36px;
+    width: 36px;
+    object-fit: contain;
+    display: block;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--app-primary);
+    letter-spacing: -0.5px;
+  }
+
+  // Smoothly switches to a centered layout stack on mobile screens
+  @media (max-width: 960px) {
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 24px;
+    padding-left: 10px;
+    
+    img {
+      height: 48px;
+      width: 48px;
+    }
+  }
+}
+
+// Allows long business verification profiles to scroll smoothly on small vertical monitors
+.large-form-scroll {
+  max-height: 85vh;
+  overflow-y: auto;
+  padding-right: 8px !important;
+
+  // Custom polished scrollbar architecture
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 4px; }
+}
+
+// ==========================================================================
+// 4. ANGULAR MATERIAL TAB SELECTION GRAPHICS
+// ==========================================================================
+.auth-tabs {
+  width: 100%;
+
+  // Overriding Material slider systems to follow your exact blood red color spectrum
+  ::v-deep .mat-mdc-tab-slider-indicator {
+    background-color: var(--app-primary) !important;
+  }
+  
+  ::v-deep .mdc-tab-indicator__content--activated {
+    border-color: var(--app-primary) !important;
+  }
+
+  ::v-deep .mdc-tab__text-label {
+    font-weight: 600 !important;
+    font-size: 0.95rem;
+  }
+}
+
+.auth-form-layout {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 4px 4px 4px;
+}
+
+.tab-instruction-text {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 24px 0;
+  line-height: 1.4;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px; // Increased margin to protect field separation
+}
+
+.submit-btn {
+  height: 48px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 16px;
+  box-shadow: 0 4px 12px rgba(153, 0, 0, 0.2) !important;
+}
+
+// Section Header Layout Accents
+.form-section-divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0 16px 0; // Better vertical positioning away from inputs
+  width: 100%;
+
+  span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #999;
+    background-color: var(--app-white);
+    padding-right: 10px;
+  }
+
+  &:after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px dashed #e0e0e0;
+  }
+}
+
+// Micro Responsive Forms Layout Grid Engines
+.form-grid-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 12px; // Added distinct horizontal and vertical gap
+  margin-bottom: 12px; // Guarantees the next row down does not slide up
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 12px 0;
+  }
+}
+
+.form-grid-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px 12px; // Added distinct horizontal and vertical gap
+  margin-bottom: 12px; // Guarantees the next row down does not slide up
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 12px 0;
+  }
+}
+
+// Fix overlay by safely hiding space without fully collapsing container height references
+::v-deep .mat-mdc-form-field-subscript-wrapper {
+  box-sizing: border-box;
+  height: 0px !important;
+  margin-top: 0px !important;
+  padding: 0 !important;
+  overflow: hidden; // Gracefully handles spacing quirks without layout distortion
+}
+
+// ==========================================================================
+// 5. SECURITY & EXCEPTION HANDLING WRAPPER BLOCKS
+// ==========================================================================
+.error-alert-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(153, 0, 0, 0.05);
+  border-left: 4px solid var(--app-primary);
+  color: var(--app-primary);
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-top: 24px;
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  mat-icon {
+    font-size: 20px;
+  }
+}
+
+// Heading structures for secondary panel workspaces
+.form-panel-heading {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--app-text-dark);
+  margin: 0 0 6px 0;
+  text-align: left;
+}
+
+// Utility formatting blocks
+.text-left {
+  text-align: left !important;
+}
+
+.link-action-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -4px;
+  margin-bottom: 16px;
+}
+
+.form-navigation-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--app-primary);
+  text-decoration: none;
+  cursor: pointer;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.alternate-view-text {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 24px;
+  margin-bottom: 0;
+
+  a {
+    color: var(--app-primary);
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Micro interaction animation transitions
+.animate-fade-in {
+  animation: authFormFade 0.35s ease-out forwards;
+}
+
+@keyframes authFormFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+// ==========================================================================
+// 6. ANGULAR MATERIAL OVERLAY & DROPDOWN PANEL POSITIONING FIXES
+// ==========================================================================
+// Forces the mat-select dropdown options panel to drop down BELOW the input 
+// field instead of generating a masking overlay directly on top of it.
+::v-deep .mat-mdc-select-panel {
+  margin-top: 8px !important; // Creates a clean breathing space below the trigger box
+  border-radius: 6px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+// Adjusts the overlay origin behavior to animate cleanly from the bottom boundary
+::v-deep .cdk-overlay-connected-position-bounding-box {
+  --mat-select-trigger-text-height: 22px; 
+}

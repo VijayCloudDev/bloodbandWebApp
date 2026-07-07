@@ -1,0 +1,264 @@
+// ==========================================================================
+// 1. GLOBAL FULL-SCREEN CENTERED CONTAINER
+// ==========================================================================
+.registration-layout-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #f8f9fa; // Clean crisp structural background
+  padding: 40px 24px;
+  box-sizing: border-box;
+}
+
+// ==========================================================================
+// 2. CENTRAL CARD CONTAINER WIZARD WORKSPACE
+// ==========================================================================
+.wizard-card-layout {
+  width: 100%;
+  max-width: 650px !important; // Wider room allocations dedicated for inline tabular stepper headers
+  padding: 32px;
+  background-color: var(--app-white);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+
+  @media (max-width: 600px) {
+    padding: 24px 16px;
+  }
+}
+
+// Polished branding header format configuration
+.form-brand-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f5f5f5;
+  padding-bottom: 16px;
+
+  img {
+    height: 38px;
+    width: 38px;
+    object-fit: contain;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--app-primary);
+    letter-spacing: -0.5px;
+  }
+}
+
+// ==========================================================================
+// 3. ANGULAR MATERIAL STEPPER COMPONENT LAYOUT MECHANICS
+// ==========================================================================
+.custom-horizontal-stepper {
+  background: transparent !important;
+  
+  ::v-deep .mat-horizontal-stepper-header-container {
+    padding: 0 0 16px 0 !important;
+  }
+
+  ::v-deep .mat-horizontal-content-container {
+    padding: 16px 0 0 0 !important;
+  }
+}
+
+.step-content-box {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 4px 4px 4px; // Safe padding clearance boundary prevents input clipping
+}
+
+.stepper-action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  width: 100%;
+
+  .spacer { 
+    flex: 1; 
+  }
+
+  &.submission-row {
+    margin-top: 24px;
+    border-top: 1px solid #f5f5f5;
+    padding-top: 16px;
+  }
+}
+
+// ==========================================================================
+// 4. ANGULAR MATERIAL FORM FIELD & OUTLINE NOTCH OVERLAP FIXES
+// ==========================================================================
+::v-deep {
+  // Corrects the outline notch tracking so floating labels rest neatly without clipping
+  .mat-mdc-form-field-appearance-outline {
+    margin-bottom: 8px;
+
+    .mdc-notched-outline__label {
+      margin-top: -2px !important;
+    }
+    
+    // Aligns floating labels gracefully when focused or populated
+    &.mat-form-field-should-float .mdc-notched-outline__label {
+      transform: translateY(-35%) scale(0.75) !important;
+      background-color: var(--app-white) !important; // Masks the line underneath the text block
+      padding: 0 4px !important;
+      margin-top: 0 !important;
+    }
+  }
+
+  // Prevents baseline collapses while retaining subtext bounds validation margins
+  .mat-mdc-form-field-subscript-wrapper {
+    box-sizing: border-box;
+    height: 16px !important; 
+    margin-top: 0px !important;
+    padding: 0 16px !important;
+  }
+
+  // Adjusts horizontal stepper indicator header sizes
+  .mat-horizontal-stepper-header {
+    height: 48px !important;
+    padding: 0 16px !important;
+  }
+
+  // UI select panel drop-down styling overrides
+  .mat-mdc-select-panel {
+    margin-top: 8px !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+// ==========================================================================
+// 5. SECURE RESPONSIVE GRID SYSTEMS & LAYOUT ALIGNMENTS
+// ==========================================================================
+.auth-form-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-panel-heading {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--app-text-dark);
+  margin: 0 0 4px 0;
+}
+
+.tab-instruction-text {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 20px 0;
+  line-height: 1.4;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.submit-btn {
+  height: 48px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(153, 0, 0, 0.2) !important;
+}
+
+.form-grid-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 8px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 12px 0;
+  }
+}
+
+.form-grid-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 12px 0;
+  }
+}
+
+.alternate-view-text {
+  font-size: 0.85rem;
+  color: #555;
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 0;
+
+  a {
+    color: var(--app-primary);
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.error-alert-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(153, 0, 0, 0.05);
+  border-left: 4px solid var(--app-primary);
+  color: var(--app-primary);
+  padding: 12px;
+  border-radius: 4px;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+
+  mat-icon { font-size: 20px; }
+}
+
+// ==========================================================================
+// 6. ANIMATION TIMELINES
+// ==========================================================================
+.animate-fade-in {
+  animation: stepFade 0.3s ease-out forwards;
+}
+
+@keyframes stepFade {
+  from { 
+    opacity: 0; 
+    transform: translateX(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+// ==========================================================================
+// 7. ENFORCE CRITICAL VALIDATION TYPOGRAPHY COLORS
+// ==========================================================================
+::v-deep {
+  // Overrides any global color inheritance leakage and forces bright red alerts
+  mat-error,
+  .mat-mdc-form-field-error {
+    color: #f44336 !important; // Clean Material Design Red Accent
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    display: block !important;
+    margin-top: 4px !important;
+  }
+}

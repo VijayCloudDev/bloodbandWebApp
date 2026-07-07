@@ -1,0 +1,36 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Clean M3 color configuration definition
+$brand-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$red-palette,
+    use-system-variables: true
+  )
+));
+
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #ffffff;
+}
+
+// Apply the theme components globally
+html {
+  @include mat.all-component-themes($brand-theme);
+}
+
+// Global brand token overrides for layout compliance
+:root {
+  --app-primary: #990000;
+  --app-white: #ffffff;
+  --app-gray-bg: #f8f9fa;
+  --app-text-dark: #1a1a1a;
+}
+
+.brand-bg-primary { background-color: var(--app-primary) !important; color: var(--app-white) !important; }
+.brand-text-primary { color: var(--app-primary) !important; }
+.brand-bg-white { background-color: var(--app-white) !important; color: var(--app-text-dark) !important; }

@@ -1,0 +1,20 @@
+<div class="app-container">
+  <app-header (toggleSidebar)="sidenav.toggle()"></app-header>
+
+  <mat-sidenav-container class="sidenav-container">
+    <!-- Mobile responsive backdrop drawer mapping -->
+    <mat-sidenav #sidenav 
+                 [mode]="(isHandset$ | async) ? 'over' : 'side'" 
+                 [opened]="!(isHandset$ | async)" 
+                 class="app-sidebar">
+      <app-sidebar></app-sidebar>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="main-content-window">
+      <main class="router-viewport-box">
+        <router-outlet></router-outlet>
+      </main>
+      <app-footer></app-footer>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
