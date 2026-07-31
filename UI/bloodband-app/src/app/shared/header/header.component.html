@@ -1,10 +1,14 @@
 <mat-toolbar class="app-header-toolbar brand-bg-white">
-  <button mat-icon-button (click)="toggleSidebar.emit()" aria-label="Toggle Side panel Menu" class="brand-text-primary">
+  <button
+    mat-icon-button
+    (click)="toggleSidebar.emit()"
+    aria-label="Toggle Side panel Menu"
+    class="brand-text-primary"
+  >
     <mat-icon>menu</mat-icon>
   </button>
-  
+
   <div class="logo-wrapper-frame">
-    <!-- Referencing your verbatim logo file path -->
     <img src="assets/logo_36.png" alt="Blood Band Logo" class="brand-logo-img" />
     <span class="brand-title-text brand-text-primary">Bloodband</span>
   </div>
@@ -14,10 +18,39 @@
   <button mat-icon-button aria-label="Favorites" class="brand-text-primary">
     <mat-icon>favorite_border</mat-icon>
   </button>
+
   <button mat-icon-button aria-label="Notifications" class="brand-text-primary">
     <mat-icon matBadge="2" matBadgeColor="warn">notifications_none</mat-icon>
   </button>
-  <button mat-icon-button aria-label="Account Settings" class="brand-text-primary">
+
+  <button
+    mat-icon-button
+    class="brand-text-primary avatar-trigger"
+    [matMenuTriggerFor]="accountMenu"
+    aria-label="Account menu"
+  >
     <mat-icon>account_circle</mat-icon>
   </button>
+
+  <mat-menu #accountMenu="matMenu" class="account-menu-panel">
+    <div class="account-menu-header" (click)="$event.stopPropagation()">
+      <mat-icon class="account-menu-avatar brand-text-primary">account_circle</mat-icon>
+      <div class="account-menu-meta">
+        <span class="account-menu-name">{{ displayName }}</span>
+        <span class="account-menu-role">{{ userRole }}</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <button mat-menu-item (click)="openProfile()">
+      <mat-icon class="brand-text-primary">person</mat-icon>
+      <span>Profile</span>
+    </button>
+
+    <button mat-menu-item (click)="signOut()">
+      <mat-icon class="brand-text-primary">logout</mat-icon>
+      <span>Sign out</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>

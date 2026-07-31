@@ -14,11 +14,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiService } from '../../../core/api.service';
+import { AuthService } from '../../../core/auth.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { jwtDecode } from 'jwt-decode'; // ✅ Standard import for reading payload schemas
 import {
   AdminLoginDto,
   LoginResponseDto,
@@ -51,6 +51,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private apiService = inject(ApiService);
+  private auth = inject(AuthService);
 
   authMode: AuthViewMode = 'login';
 
@@ -173,38 +174,18 @@ export class LoginComponent {
       next: (response: LoginResponseDto) => {
         this.loading = false;
 
-        // Match with LoginResponseDto properties ('accessToken')[cite: 6]
-        if (response && response.accessToken) {
-          localStorage.setItem('token', response.accessToken); // Keep key as 'token' for interceptors[cite: 12]
+        if (response?.accessToken) {
+          this.auth.setSession(response.accessToken, response.refreshToken);
 
-          try {
-            const decodedToken: any = jwtDecode(response.accessToken);
-
-            // Clean extraction filtering standard strings or structured URI fallbacks
-            const userRole =
-              decodedToken.role ??
-              decodedToken[
-                'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-              ];
-            console.log('Decoded JWT Role:', userRole); // Debugging output for role verification
-            // 🔀 Route to appropriate dashboard based on user role
-            // 🔀 Route to appropriate dashboard based on user role[cite: 18]
-            if (userRole === 'SuperAdmin') {
-              console.log(
-                'SuperAdmin detected, navigating to super-admin-dashboard',
-              );
-              this.router.navigate(['/super-admin-dashboard']); // Matches path declared in routing config[cite: 18]
-            } else if (userRole === 'Admin') {
-              console.log('Admin detected, navigating to admin-dashboard');
-              this.router.navigate(['/admin-dashboard']);
-            } else {
-              console.log(
-                'Standard user detected, navigating to user-dashboard',
-              );
-              this.router.navigate(['/dashboard']);
-            }
-          } catch (decodeError) {
-            // Fallback route if the token format is unexpected
+          const userRole = this.auth.getUserRole();
+          if (userRole === 'SuperAdmin') {
+            this.router.navigate(['/super-admin-dashboard']);
+          } else if (
+            userRole === 'Admin' ||
+            userRole === 'OrganizationAdmin'
+          ) {
+            this.router.navigate(['/admin-dashboard']);
+          } else {
             this.router.navigate(['/dashboard']);
           }
         }

@@ -1,1 +1,112 @@
-<p>user-detail works!</p>
+<div class="profile-viewport">
+  <header class="page-title-header">
+    <div class="title-block">
+      <button mat-icon-button type="button" (click)="goBack()" aria-label="Back to dashboard">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>My Profile</h1>
+    </div>
+
+    <button mat-stroked-button type="button" class="signout-btn" (click)="signOut()">
+      <mat-icon>logout</mat-icon>
+      Sign out
+    </button>
+  </header>
+
+  <div class="loading-state" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading profile…</p>
+  </div>
+
+  <div class="error-alert" *ngIf="!loading && error">
+    <mat-icon>error_outline</mat-icon>
+    <span>{{ error }}</span>
+    <button mat-button type="button" (click)="loadProfile()">Retry</button>
+  </div>
+
+  <mat-card class="profile-card" *ngIf="!loading && profile">
+    <mat-card-content>
+      <div class="profile-hero">
+        <div class="avatar-frame">
+          <img
+            *ngIf="resolveImageUrl(profile.profileImageUrl) as img"
+            [src]="img"
+            alt="Profile photo"
+            class="avatar-image"
+          />
+          <mat-icon *ngIf="!resolveImageUrl(profile.profileImageUrl)" class="avatar-fallback">
+            account_circle
+          </mat-icon>
+        </div>
+
+        <div class="hero-text">
+          <h2>{{ profile.fullName || 'User' }}</h2>
+          <p class="hero-sub">{{ profile.email || profile.phoneNumber || '—' }}</p>
+
+          <div class="hero-actions">
+            <label class="upload-btn brand-bg-primary" [class.disabled]="uploading">
+              <mat-icon>photo_camera</mat-icon>
+              {{ uploading ? 'Uploading…' : 'Update photo' }}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/jpg"
+                hidden
+                [disabled]="uploading"
+                (change)="onFileSelected($event)"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="label">Full name</span>
+          <span class="value">{{ profile.fullName || '—' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Phone</span>
+          <span class="value">{{ profile.phoneNumber || '—' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Email</span>
+          <span class="value">{{ profile.email || '—' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Gender</span>
+          <span class="value">{{ profile.gender || '—' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Blood group</span>
+          <span class="value">{{ profile.bloodGroupName || '—' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Place</span>
+          <span class="value">{{ profile.place || '—' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Country</span>
+          <span class="value">{{ profile.countryName || '—' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">State</span>
+          <span class="value">{{ profile.stateName || '—' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">District</span>
+          <span class="value">{{ profile.districtName || '—' }}</span>
+        </div>
+        <div class="detail-item full-width">
+          <span class="label">Current address</span>
+          <span class="value">{{ profile.currentAddress || '—' }}</span>
+        </div>
+        <div class="detail-item full-width">
+          <span class="label">Permanent address</span>
+          <span class="value">{{ profile.permanentAddress || '—' }}</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
