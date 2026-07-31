@@ -60,13 +60,52 @@
 // ==========================================================================
 .custom-horizontal-stepper {
   background: transparent !important;
-  
-  ::v-deep .mat-horizontal-stepper-header-container {
+
+  ::ng-deep .mat-horizontal-stepper-header-container {
     padding: 0 0 16px 0 !important;
   }
 
-  ::v-deep .mat-horizontal-content-container {
+  ::ng-deep .mat-stepper-horizontal-line {
+    display: none !important;
+  }
+
+  ::ng-deep .mat-horizontal-content-container {
     padding: 16px 0 0 0 !important;
+  }
+
+  @media (max-width: 600px) {
+    ::ng-deep .mat-horizontal-stepper-header-container {
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0 0 12px 0 !important;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    ::ng-deep .mat-horizontal-stepper-header-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    ::ng-deep .mat-horizontal-stepper-header {
+      flex: 0 0 auto;
+      min-width: max-content;
+      padding: 0 12px !important;
+    }
+
+    ::ng-deep .mat-step-label {
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+
+    ::ng-deep .mat-step-text-label {
+      white-space: nowrap;
+    }
+
+    ::ng-deep .mat-step-icon-content,
+    ::ng-deep .mat-step-icon {
+      font-size: 0.85rem;
+    }
+
   }
 }
 
@@ -83,8 +122,8 @@
   margin-top: 16px;
   width: 100%;
 
-  .spacer { 
-    flex: 1; 
+  .spacer {
+    flex: 1;
   }
 
   &.submission-row {
@@ -97,7 +136,8 @@
 // ==========================================================================
 // 4. ANGULAR MATERIAL FORM FIELD & OUTLINE NOTCH OVERLAP FIXES
 // ==========================================================================
-::v-deep {
+::ng-deep {
+
   // Corrects the outline notch tracking so floating labels rest neatly without clipping
   .mat-mdc-form-field-appearance-outline {
     margin-bottom: 8px;
@@ -105,7 +145,7 @@
     .mdc-notched-outline__label {
       margin-top: -2px !important;
     }
-    
+
     // Aligns floating labels gracefully when focused or populated
     &.mat-form-field-should-float .mdc-notched-outline__label {
       transform: translateY(-35%) scale(0.75) !important;
@@ -118,9 +158,15 @@
   // Prevents baseline collapses while retaining subtext bounds validation margins
   .mat-mdc-form-field-subscript-wrapper {
     box-sizing: border-box;
-    height: 16px !important; 
-    margin-top: 0px !important;
+    min-height: 26px;
+    height: auto !important;
+    margin-top: 6px !important;
     padding: 0 16px !important;
+  }
+
+  .mat-mdc-form-field-infix {
+    padding-top: 18px;
+    padding-bottom: 14px;
   }
 
   // Adjusts horizontal stepper indicator header sizes
@@ -133,6 +179,13 @@
   .mat-mdc-select-panel {
     margin-top: 8px !important;
     border-radius: 6px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+
+  // Datepicker calendar popup background fix
+  .mat-datepicker-content {
+    background-color: #fff !important;
+    border-radius: 8px !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
   }
 }
@@ -228,7 +281,9 @@
   font-size: 0.85rem;
   font-weight: 500;
 
-  mat-icon { font-size: 20px; }
+  mat-icon {
+    font-size: 20px;
+  }
 }
 
 // ==========================================================================
@@ -239,23 +294,26 @@
 }
 
 @keyframes stepFade {
-  from { 
-    opacity: 0; 
-    transform: translateX(10px); 
+  from {
+    opacity: 0;
+    transform: translateX(10px);
   }
-  to { 
-    opacity: 1; 
-    transform: translateX(0); 
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
+
 // ==========================================================================
 // 7. ENFORCE CRITICAL VALIDATION TYPOGRAPHY COLORS
 // ==========================================================================
-::v-deep {
-  // Overrides any global color inheritance leakage and forces bright red alerts
+::ng-deep {
+
+  // Overrides any global color inheritance leakage and forces blood red alerts
   mat-error,
   .mat-mdc-form-field-error {
-    color: #f44336 !important; // Clean Material Design Red Accent
+    color: var(--app-primary) !important;
     font-size: 0.75rem !important;
     font-weight: 500 !important;
     display: block !important;

@@ -143,6 +143,9 @@ builder.Services.AddScoped<ChatRepository>();
 builder.Services.AddScoped<AdService>();
 builder.Services.AddScoped<AdRepository>();
 
+builder.Services.AddScoped<CommonService>();
+builder.Services.AddScoped<CommonRepository>();
+
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache();

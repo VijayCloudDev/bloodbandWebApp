@@ -3,17 +3,14 @@
 @include mat.core();
 
 // Clean M3 color configuration definition
-$brand-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$red-palette,
-    use-system-variables: true
-  )
-));
+$brand-theme: mat.define-theme((color: (theme-type: light,
+        primary: mat.$red-palette,
+        use-system-variables: true)));
 
-html, body { 
-  height: 100%; 
-  margin: 0; 
+html,
+body {
+  height: 100%;
+  margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: #ffffff;
 }
@@ -31,6 +28,40 @@ html {
   --app-text-dark: #1a1a1a;
 }
 
-.brand-bg-primary { background-color: var(--app-primary) !important; color: var(--app-white) !important; }
-.brand-text-primary { color: var(--app-primary) !important; }
-.brand-bg-white { background-color: var(--app-white) !important; color: var(--app-text-dark) !important; }
+.brand-bg-primary {
+  background-color: var(--app-primary) !important;
+  color: var(--app-white) !important;
+}
+
+.brand-text-primary {
+  color: var(--app-primary) !important;
+}
+
+.brand-bg-white {
+  background-color: var(--app-white) !important;
+  color: var(--app-text-dark) !important;
+}
+
+// Datepicker calendar overlay background fix
+.mat-datepicker-content {
+  background-color: #fff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+// Select overlay background fix
+.cdk-overlay-pane .mat-mdc-select-panel {
+  background-color: #fff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.cdk-overlay-pane .mat-mdc-option {
+  background-color: #fff !important;
+}
+
+.cdk-overlay-pane .mat-mdc-option.mdc-list-item--selected,
+.cdk-overlay-pane .mat-mdc-option:hover,
+.cdk-overlay-pane .mat-mdc-option.mat-mdc-option-active {
+  background-color: rgba(153, 0, 0, 0.08) !important;
+}

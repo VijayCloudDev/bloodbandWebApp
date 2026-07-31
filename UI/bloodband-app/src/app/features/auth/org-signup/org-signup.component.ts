@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,10 +9,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker'; 
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, ErrorStateMatcher } from '@angular/material/core';
 import { ApiService } from '../../../core/api.service';
+import { CountryOption } from '../../../models/country.model';
 import { OrganizationModel } from '../../../models/organization.model';
+import { RegistrationTypeOption } from '../../../models/registration-type.model';
 import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 
 /**
@@ -45,12 +47,14 @@ export class InstantErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './org-signup.component.html',
   styleUrls: ['./org-signup.component.scss']
 })
-export class OrganizationRegistrationComponent {
+export class OrganizationRegistrationComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private apiService = inject(ApiService);
 
   adminSignUpForm: FormGroup;
+  countries: CountryOption[] = [];
+  registrationTypes: RegistrationTypeOption[] = [];
   loading = false;
   error = '';
 
@@ -82,7 +86,7 @@ export class OrganizationRegistrationComponent {
       }),
       compliance: this.fb.group({
         registrationNumber: ['', [Validators.required]],
-        registrationType: ['', [Validators.required]],
+        registrationType: [null, [Validators.required]],
         registrationDate: [null, [Validators.required]],
         licenseNumber: ['', [Validators.required]],
         licenseIssuedBy: ['', [Validators.required]]
@@ -101,6 +105,35 @@ export class OrganizationRegistrationComponent {
         confirmPassword: ['', [Validators.required]]
       })
     }, { validators: this.passwordMatchValidator });
+  }
+
+  ngOnInit(): void {
+    this.loadCountries();
+    this.loadRegistrationTypes();
+  }
+
+  private loadCountries(): void {
+    this.apiService.get<CountryOption[]>('common/countries').subscribe({
+      next: (countries) => {
+        this.countries = countries;
+      },
+      error: (err) => {
+        console.error('Failed to load countries:', err);
+        this.error = 'Unable to load countries.';
+      }
+    });
+  }
+
+  private loadRegistrationTypes(): void {
+    this.apiService.get<RegistrationTypeOption[]>('common/registration-types').subscribe({
+      next: (registrationTypes) => {
+        this.registrationTypes = registrationTypes;
+      },
+      error: (err) => {
+        console.error('Failed to load registration types:', err);
+        this.error = 'Unable to load registration types.';
+      }
+    });
   }
 
   private passwordMatchValidator(g: FormGroup) {
@@ -136,8 +169,8 @@ export class OrganizationRegistrationComponent {
         control?.updateValueAndValidity({ emitEvent: true });
       });
 
-      this.error = this.adminSignUpForm.hasError('mismatch') 
-        ? 'Passwords do not match.' 
+      this.error = this.adminSignUpForm.hasError('mismatch')
+        ? 'Passwords do not match.'
         : 'Please completely fill organization credentials.';
       return;
     }
@@ -156,12 +189,12 @@ export class OrganizationRegistrationComponent {
     this.apiService.post<any>('org', payload).subscribe({
       next: (response: any) => {
         console.log('Organization registration response:', response);
-        this.loading = false; 
+        this.loading = false;
         alert('Your medical facility node application was successfully filed and is pending review.');
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        this.loading = false; 
+        this.loading = false;
         this.error = err?.error?.message || 'Facility submission processing failure.';
         console.error('Organization registration error:', err);
       }
