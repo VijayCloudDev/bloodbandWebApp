@@ -32,7 +32,13 @@
     <mat-icon>account_circle</mat-icon>
   </button>
 
-  <mat-menu #accountMenu="matMenu" class="account-menu-panel">
+  <mat-menu
+    #accountMenu="matMenu"
+    [overlapTrigger]="false"
+    xPosition="before"
+    yPosition="below"
+    panelClass="account-menu-panel"
+  >
     <div class="account-menu-header" (click)="$event.stopPropagation()">
       <mat-icon class="account-menu-avatar brand-text-primary">account_circle</mat-icon>
       <div class="account-menu-meta">
