@@ -946,12 +946,11 @@ BEGIN
     SET NOCOUNT ON;
 
     SELECT
-        Id,
-        Name
-    FROM District
+        DistrictId,
+        DistrictName
+    FROM Districts
     WHERE StateId = @StateId
-      AND IsActive = 1
-    ORDER BY Name;
+    ORDER BY DistrictName;
 END;
 
 GO
@@ -988,11 +987,11 @@ BEGIN
 
     SELECT
         [StateId],
-       [StateName]
-    FROM State
+        [StateName]
+    FROM States
     WHERE CountryId = @CountryId
       AND IsActive = 1
-    ORDER BY Name;
+    ORDER BY StateName;
 END;
 GO
 /****** Object:  StoredProcedure [dbo].[sp_Dashboard_Get]    Script Date: 7/31/2026 12:09:00 PM ******/
@@ -1266,8 +1265,11 @@ BEGIN
     JOIN StatusTypeMaster stm ON sm.StatusTypeId = stm.StatusTypeId
     WHERE stm.StatusType = 'Organization' AND sm.StatusName = 'Pending';
 
-    -- Fetch default Admin role index to associate with the facility manager
-    SELECT TOP 1 @OrgRoleId = RoleId FROM Roles WHERE RoleName = 'Admin';
+    -- Facility manager role (seed uses OrganizationAdmin, not Admin)
+    SELECT TOP 1 @OrgRoleId = RoleId FROM Roles WHERE RoleName = 'OrganizationAdmin';
+
+    IF @OrgRoleId IS NULL
+        THROW 50001, 'OrganizationAdmin role is missing from Roles.', 1;
 
     BEGIN TRANSACTION;
     BEGIN TRY
@@ -2014,7 +2016,7 @@ BEGIN
             @LoginType = 'User' 
             AND @PhoneNumber IS NOT NULL 
             AND u.PhoneNumber = @PhoneNumber 
-            AND r.RoleName NOT IN ('Admin', 'SuperAdmin')
+            AND r.RoleName NOT IN ('Admin', 'OrganizationAdmin', 'SuperAdmin')
           )
           OR
           -- Path B: Management panel logging in via Email
@@ -2022,7 +2024,7 @@ BEGIN
             @LoginType = 'Admin' 
             AND @Email IS NOT NULL 
             AND u.Email = @Email 
-            AND r.RoleName IN ('Admin', 'SuperAdmin')
+            AND r.RoleName IN ('Admin', 'OrganizationAdmin', 'SuperAdmin')
           )
       )
 END

@@ -13,11 +13,12 @@ namespace BloodBand.Data
         {
             _context = context;
         }
-        public async Task Create(OrganizationModel model, int userId)
+
+        public async Task Create(OrganizationModel model)
         {
-         
             using var conn = _context.CreateConnection();
 
+            // Parameters must match sp_Organization_Create exactly (no CreatedBy).
             await conn.ExecuteAsync(
                 "sp_Organization_Create",
                 new
@@ -36,9 +37,7 @@ namespace BloodBand.Data
                     model.RegistrationDate,
                     model.LicenseNumber,
                     model.LicenseIssuedBy,
-                    PasswordHash = model.Password,
-                    CreatedBy = userId,
-                    
+                    PasswordHash = model.Password
                 },
                 commandType: CommandType.StoredProcedure
             );
@@ -65,5 +64,4 @@ namespace BloodBand.Data
             );
         }
     }
-
 }

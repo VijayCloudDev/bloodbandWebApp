@@ -37,8 +37,9 @@ namespace BloodBand.Data
         {
             using var conn = _context.CreateConnection();
 
+            // Use Master SP (correct States table) — Common geo SPs reference invalid table names.
             return await conn.QueryAsync<LookupDto>(
-                "sp_Common_GetStatesByCountryId",
+                "sp_Master_GetStates",
                 new { CountryId = countryId },
                 commandType: CommandType.StoredProcedure
             );
@@ -48,8 +49,9 @@ namespace BloodBand.Data
         {
             using var conn = _context.CreateConnection();
 
+            // Use Master SP (correct Districts table).
             return await conn.QueryAsync<LookupDto>(
-                "sp_Common_GetDistrictsByStateId",
+                "sp_Master_GetDistricts",
                 new { StateId = stateId },
                 commandType: CommandType.StoredProcedure
             );
