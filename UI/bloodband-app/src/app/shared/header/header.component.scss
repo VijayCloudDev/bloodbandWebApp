@@ -1,10 +1,13 @@
 .app-header-toolbar {
+  position: relative;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #f0f0f0;
-  padding: 0 12px; 
-  height: 52px; // Slightly decreased height for a sleeker dashboard profile
+  padding: 0 12px;
+  height: 52px;
+  background-color: var(--app-white);
 }
 
 .logo-wrapper-frame {
@@ -29,4 +32,8 @@
 
 .toolbar-spacer {
   flex: 1 1 auto;
+}
+
+.avatar-trigger {
+  margin-left: 2px;
 }

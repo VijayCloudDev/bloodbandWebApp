@@ -49,6 +49,11 @@ html {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
 }
 
+// Keep overlays above mat-sidenav / page actions (e.g. dashboard CTAs)
+.cdk-overlay-container {
+  z-index: 2000 !important;
+}
+
 // Select overlay background fix
 .cdk-overlay-pane .mat-mdc-select-panel {
   background-color: #fff !important;
@@ -64,4 +69,58 @@ html {
 .cdk-overlay-pane .mat-mdc-option:hover,
 .cdk-overlay-pane .mat-mdc-option.mat-mdc-option-active {
   background-color: rgba(153, 0, 0, 0.08) !important;
+}
+
+// Account / Material menu panel — opaque so page content cannot show through
+.cdk-overlay-pane .mat-mdc-menu-panel,
+.mat-mdc-menu-panel {
+  background-color: #fff !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18) !important;
+  overflow: hidden;
+}
+
+.mat-mdc-menu-panel .mat-mdc-menu-content {
+  background-color: #fff !important;
+  padding-top: 0 !important;
+  padding-bottom: 4px !important;
+}
+
+.account-menu-panel {
+  min-width: 240px !important;
+}
+
+.account-menu-panel .account-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px 12px;
+  background: #fff;
+}
+
+.account-menu-panel .account-menu-avatar {
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+}
+
+.account-menu-panel .account-menu-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.account-menu-panel .account-menu-name {
+  font-weight: 600;
+  color: var(--app-text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}
+
+.account-menu-panel .account-menu-role {
+  font-size: 0.75rem;
+  color: #6b7280;
 }

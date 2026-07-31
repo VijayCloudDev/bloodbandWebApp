@@ -7,6 +7,11 @@ export class ApiService {
 
   baseUrl = 'https://localhost:7255/api';
 
+  /** API host without `/api` — used for static uploads (profile images). */
+  get mediaBaseUrl(): string {
+    return this.baseUrl.replace(/\/api\/?$/, '');
+  }
+
   constructor(private http: HttpClient) {}
 
   get<T>(url: string): Observable<T> {
@@ -16,6 +21,11 @@ export class ApiService {
   // ✅ Added generic type argument <T> to enforce model safety on payloads and return maps
   post<T>(url: string, body: any): Observable<T> {
     return this.http.post<T>(`${this.baseUrl}/${url}`, body);
+  }
+
+  /** Multipart upload (e.g. profile image). Do not set Content-Type manually. */
+  postFormData<T>(url: string, formData: FormData): Observable<T> {
+    return this.http.post<T>(`${this.baseUrl}/${url}`, formData);
   }
 
   put<T>(url: string, body: any): Observable<T> {
