@@ -599,7 +599,8 @@ SET IDENTITY_INSERT [dbo].[StatusTypeMaster] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Users] ON 
 GO
-INSERT [dbo].[Users] ([UserId], [FullName], [PhoneNumber], [Email], [PasswordHash], [Gender], [LastDonatedDate], [RoleId], [IsActive], [CreatedAt], [FailedAttemptCount], [IsLocked], [LockedAt], [ProfileImageUrl], [CountryId], [StateId], [DistrictId], [Place], [CurrentAddress], [PermanentAddress], [BloodGroupId]) VALUES (1, N'System Super Admin', N'0000000000', N'superadmin@bloodband.com', N'$2a$11$mC11XvG900fQoXq3j0B8puxL9MBy48DoxA6O7LDe8ZitwT56C2B4q', N'Male', NULL, 1, 1, CAST(N'2026-07-04T11:27:01.847' AS DateTime), 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1)
+-- PasswordHash is BCrypt for plaintext password: Admin@123
+INSERT [dbo].[Users] ([UserId], [FullName], [PhoneNumber], [Email], [PasswordHash], [Gender], [LastDonatedDate], [RoleId], [IsActive], [CreatedAt], [FailedAttemptCount], [IsLocked], [LockedAt], [ProfileImageUrl], [CountryId], [StateId], [DistrictId], [Place], [CurrentAddress], [PermanentAddress], [BloodGroupId]) VALUES (1, N'System Super Admin', N'0000000000', N'superadmin@bloodband.com', N'$2a$11$xsrXH9d7S8A9.oWb9TwaGO9lpdxgXIspliRftVwB.w3IPL0jgFnbW', N'Male', NULL, 1, 1, CAST(N'2026-07-04T11:27:01.847' AS DateTime), 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1)
 GO
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
