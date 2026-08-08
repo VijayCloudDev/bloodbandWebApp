@@ -18,6 +18,15 @@
 
         public bool IsVerified { get; set; }
 
+        public int StatusId { get; set; }
+        public string? StatusName { get; set; }
+
+        public DateTime? RegistrationDate { get; set; }
+        public DateTime? CreatedAt { get; set; }
+
+        public string? LicenseNumber { get; set; }
+        public string? LicenseIssuedBy { get; set; }
+
         public string? CountryName { get; set; }
         public string? StateName { get; set; }
         public string? DistrictName { get; set; }

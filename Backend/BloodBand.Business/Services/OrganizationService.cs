@@ -45,15 +45,19 @@ namespace BloodBand.Business.Services
             await _repo.Create(model);
         }
 
-        public async Task<IEnumerable<OrganizationDto>> GetAll()
+        public async Task<IEnumerable<OrganizationDto>> GetAll(int? statusId = null)
         {
-            return await _repo.GetAll();
+            return await _repo.GetAll(statusId);
         }
 
         public async Task UpdateStatus(int orgId, int statusId)
         {
             if (orgId <= 0)
                 throw new Exception("Invalid Organization Id");
+
+            // Organization statuses: 1=Pending, 2=Approved, 3=Rejected
+            if (statusId is < 1 or > 3)
+                throw new Exception("Invalid organization status");
 
             await _repo.UpdateStatus(orgId, statusId);
         }
