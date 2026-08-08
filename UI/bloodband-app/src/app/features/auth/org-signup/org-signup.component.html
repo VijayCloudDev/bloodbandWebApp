@@ -126,7 +126,10 @@
                 <mat-form-field appearance="outline">
                   <mat-label>State</mat-label>
                   <mat-select formControlName="stateId" [errorStateMatcher]="matcher">
-                    <mat-option [value]="10">Kerala</mat-option>
+                    <mat-option [value]="null" disabled>Please select</mat-option>
+                    <mat-option *ngFor="let state of states" [value]="state.stateId">
+                      {{ state.stateName }}
+                    </mat-option>
                   </mat-select>
                   <mat-error *ngIf="locationGroup.get('stateId')?.hasError('required')">State selection is
                     required.</mat-error>
@@ -135,7 +138,10 @@
                 <mat-form-field appearance="outline">
                   <mat-label>District</mat-label>
                   <mat-select formControlName="districtId" [errorStateMatcher]="matcher">
-                    <mat-option [value]="101">Thiruvananthapuram</mat-option>
+                    <mat-option [value]="null" disabled>Please select</mat-option>
+                    <mat-option *ngFor="let district of districts" [value]="district.districtId">
+                      {{ district.districtName }}
+                    </mat-option>
                   </mat-select>
                   <mat-error *ngIf="locationGroup.get('districtId')?.hasError('required')">District selection is
                     required.</mat-error>

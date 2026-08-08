@@ -17,14 +17,21 @@ import { OrganizationModel } from '../../../models/organization.model';
 import { RegistrationTypeOption } from '../../../models/registration-type.model';
 import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 
-/**
- * CUSTOM ERROR STATE MATCHER
- * Overrides default behavior to force evaluation rendering the second an invalid control is flagged as touched
- */
+/** Forces mat-error as soon as a control is touched and invalid. */
 export class InstantErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     return !!(control && control.invalid && control.touched);
   }
+}
+
+export interface StateOption {
+  stateId: number;
+  stateName: string;
+}
+
+export interface DistrictOption {
+  districtId: number;
+  districtName: string;
 }
 
 @Component({
@@ -54,14 +61,15 @@ export class OrganizationRegistrationComponent implements OnInit {
 
   adminSignUpForm: FormGroup;
   countries: CountryOption[] = [];
+  states: StateOption[] = [];
+  districts: DistrictOption[] = [];
   registrationTypes: RegistrationTypeOption[] = [];
   loading = false;
+  loadingGeo = false;
   error = '';
 
-  // Expose instance variable reference to the HTML Template context
   matcher = new InstantErrorStateMatcher();
 
-  // Strongly typed sub-group wrappers preventing strict compilation null injection faults
   get identityGroup(): FormGroup {
     return this.adminSignUpForm.get('identity') as FormGroup;
   }
@@ -93,8 +101,8 @@ export class OrganizationRegistrationComponent implements OnInit {
       }),
       location: this.fb.group({
         countryId: [null, [Validators.required]],
-        stateId: [null, [Validators.required]],
-        districtId: [null, [Validators.required]],
+        stateId: [{ value: null, disabled: true }, [Validators.required]],
+        districtId: [{ value: null, disabled: true }, [Validators.required]],
         place: ['', [Validators.required]],
         pincode: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]]
       }),
@@ -110,12 +118,38 @@ export class OrganizationRegistrationComponent implements OnInit {
   ngOnInit(): void {
     this.loadCountries();
     this.loadRegistrationTypes();
+
+    this.locationGroup.get('countryId')?.valueChanges.subscribe((countryId: number | null) => {
+      this.states = [];
+      this.districts = [];
+      this.locationGroup.patchValue({ stateId: null, districtId: null }, { emitEvent: false });
+      this.locationGroup.get('stateId')?.disable({ emitEvent: false });
+      this.locationGroup.get('districtId')?.disable({ emitEvent: false });
+      if (countryId) {
+        this.loadStates(countryId);
+      }
+    });
+
+    this.locationGroup.get('stateId')?.valueChanges.subscribe((stateId: number | null) => {
+      this.districts = [];
+      this.locationGroup.patchValue({ districtId: null }, { emitEvent: false });
+      this.locationGroup.get('districtId')?.disable({ emitEvent: false });
+      if (stateId) {
+        this.loadDistricts(stateId);
+      }
+    });
   }
 
   private loadCountries(): void {
     this.apiService.get<CountryOption[]>('common/countries').subscribe({
       next: (countries) => {
-        this.countries = countries;
+        this.countries = countries || [];
+        const india = this.countries.find(
+          (c) => String(c.countryName || '').toLowerCase() === 'india'
+        );
+        if (india) {
+          this.locationGroup.patchValue({ countryId: india.countryId });
+        }
       },
       error: (err) => {
         console.error('Failed to load countries:', err);
@@ -124,10 +158,42 @@ export class OrganizationRegistrationComponent implements OnInit {
     });
   }
 
+  private loadStates(countryId: number): void {
+    this.loadingGeo = true;
+    this.locationGroup.get('stateId')?.enable({ emitEvent: false });
+    this.apiService.get<StateOption[]>(`common/states/${countryId}`).subscribe({
+      next: (states) => {
+        this.states = states || [];
+        this.loadingGeo = false;
+      },
+      error: (err) => {
+        this.loadingGeo = false;
+        console.error('Failed to load states:', err);
+        this.error = 'Unable to load states for the selected country.';
+      }
+    });
+  }
+
+  private loadDistricts(stateId: number): void {
+    this.loadingGeo = true;
+    this.locationGroup.get('districtId')?.enable({ emitEvent: false });
+    this.apiService.get<DistrictOption[]>(`common/districts/${stateId}`).subscribe({
+      next: (districts) => {
+        this.districts = districts || [];
+        this.loadingGeo = false;
+      },
+      error: (err) => {
+        this.loadingGeo = false;
+        console.error('Failed to load districts:', err);
+        this.error = 'Unable to load districts for the selected state.';
+      }
+    });
+  }
+
   private loadRegistrationTypes(): void {
     this.apiService.get<RegistrationTypeOption[]>('common/registration-types').subscribe({
       next: (registrationTypes) => {
-        this.registrationTypes = registrationTypes;
+        this.registrationTypes = registrationTypes || [];
       },
       error: (err) => {
         console.error('Failed to load registration types:', err);
@@ -146,14 +212,11 @@ export class OrganizationRegistrationComponent implements OnInit {
     return password === confirmPassword ? null : { mismatch: true };
   }
 
-  /**
-   * Evaluates sub-group structure state constraints. Hot-reloads validation hooks inside pristine frames.
-   */
   validateStep(stepGroup: FormGroup, stepper: MatStepper): void {
     if (stepGroup.valid) {
       stepper.next();
     } else {
-      Object.keys(stepGroup.controls).forEach(field => {
+      Object.keys(stepGroup.controls).forEach((field) => {
         const control = stepGroup.get(field);
         control?.markAsTouched({ onlySelf: true });
         control?.updateValueAndValidity({ emitEvent: true });
@@ -163,7 +226,7 @@ export class OrganizationRegistrationComponent implements OnInit {
 
   onAdminSignUpSubmit(): void {
     if (this.adminSignUpForm.invalid) {
-      Object.keys(this.securityGroup.controls).forEach(field => {
+      Object.keys(this.securityGroup.controls).forEach((field) => {
         const control = this.securityGroup.get(field);
         control?.markAsTouched({ onlySelf: true });
         control?.updateValueAndValidity({ emitEvent: true });
@@ -178,24 +241,30 @@ export class OrganizationRegistrationComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    const formValue = this.adminSignUpForm.value;
+    // getRawValue includes disabled geo controls (state/district).
+    const formValue = this.adminSignUpForm.getRawValue();
+    const { confirmPassword, ...security } = formValue.security;
+
     const payload: OrganizationModel = {
       ...formValue.identity,
       ...formValue.compliance,
       ...formValue.location,
-      ...formValue.security
+      ...security
     };
 
     this.apiService.post<any>('org', payload).subscribe({
-      next: (response: any) => {
-        console.log('Organization registration response:', response);
+      next: () => {
         this.loading = false;
         alert('Your medical facility node application was successfully filed and is pending review.');
         this.router.navigate(['/login']);
       },
       error: (err) => {
         this.loading = false;
-        this.error = err?.error?.message || 'Facility submission processing failure.';
+        this.error =
+          err?.error?.message ||
+          err?.error?.title ||
+          (typeof err?.error === 'string' ? err.error : null) ||
+          'Facility submission processing failure.';
         console.error('Organization registration error:', err);
       }
     });

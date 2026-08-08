@@ -1,9 +1,14 @@
 using BloodBand.Business.Services;
 using BloodBand.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BloodBand.API.Controllers
 {
+    /// <summary>
+    /// Public master-data lookups used by registration flows.
+    /// </summary>
+    [AllowAnonymous]
     [ApiController]
     [Route("api/common")]
     public class CommonController : ControllerBase

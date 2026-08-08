@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using BloodBand.Business.Services;
 using BloodBand.Models;
-using BloodBand.API.Extensions;
 
 namespace BloodBand.API.Controllers
 {
@@ -17,35 +16,37 @@ namespace BloodBand.API.Controllers
             _service = service;
         }
 
-        // ✅ CREATE
-        [Authorize]
+        /// <summary>
+        /// Public organization self-registration (creates org + manager user).
+        /// </summary>
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] OrganizationModel model)
         {
-            var userId = User.GetUserId();
-
-            await _service.Create(model, userId);
-
-            return Ok(new { message = "Organization Registration Submitted Successfully" });
+            try
+            {
+                await _service.Create(model);
+                return Ok(new { message = "Organization Registration Submitted Successfully" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
-        // ✅ GET ALL
         [Authorize]
         [HttpGet("list")]
         public async Task<IActionResult> GetAll()
         {
             var data = await _service.GetAll();
-
             return Ok(data);
         }
 
-        // ✅ UPDATE STATUS (ADMIN)
         [Authorize(Roles = "SuperAdmin")]
         [HttpPut("status")]
         public async Task<IActionResult> ChangeStatus(int orgId, int statusId)
         {
             await _service.UpdateStatus(orgId, statusId);
-
             return Ok("Updated");
         }
     }
