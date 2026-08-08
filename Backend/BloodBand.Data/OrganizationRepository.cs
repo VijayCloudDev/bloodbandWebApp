@@ -43,12 +43,13 @@ namespace BloodBand.Data
             );
         }
 
-        public async Task<IEnumerable<OrganizationDto>> GetAll()
+        public async Task<IEnumerable<OrganizationDto>> GetAll(int? statusId = null)
         {
             using var conn = _context.CreateConnection();
 
             return await conn.QueryAsync<OrganizationDto>(
                 "sp_Organization_GetAll",
+                new { StatusId = statusId },
                 commandType: CommandType.StoredProcedure
             );
         }

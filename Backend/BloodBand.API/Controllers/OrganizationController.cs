@@ -34,20 +34,30 @@ namespace BloodBand.API.Controllers
             }
         }
 
-        [Authorize]
+        /// <summary>
+        /// Organization directory for SuperAdmin review. Optional statusId filter (1 Pending, 2 Approved, 3 Rejected).
+        /// </summary>
+        [Authorize(Roles = "SuperAdmin")]
         [HttpGet("list")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int? statusId = null)
         {
-            var data = await _service.GetAll();
+            var data = await _service.GetAll(statusId);
             return Ok(data);
         }
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpPut("status")]
-        public async Task<IActionResult> ChangeStatus(int orgId, int statusId)
+        public async Task<IActionResult> ChangeStatus([FromQuery] int orgId, [FromQuery] int statusId)
         {
-            await _service.UpdateStatus(orgId, statusId);
-            return Ok("Updated");
+            try
+            {
+                await _service.UpdateStatus(orgId, statusId);
+                return Ok(new { message = "Organization status updated" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

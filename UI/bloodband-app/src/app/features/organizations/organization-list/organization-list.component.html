@@ -1,1 +1,180 @@
-<p>organization-list works!</p>
+<div class="org-review-viewport">
+  <div class="page-title-header">
+    <div>
+      <h1>Organization Review</h1>
+      <p class="page-subtitle">Review facility onboarding submissions and approve pending organizations.</p>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button class="action-btn" type="button" (click)="loadOrganizations()" [disabled]="loading">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <div class="kpi-summary-grid">
+    <mat-card class="stat-kpi-card status-pending">
+      <mat-card-content>
+        <div class="kpi-header">
+          <span>Pending Approvals</span>
+          <mat-icon>hourglass_top</mat-icon>
+        </div>
+        <div class="kpi-value">{{ pendingCount }}</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-kpi-card status-active">
+      <mat-card-content>
+        <div class="kpi-header">
+          <span>Approved</span>
+          <mat-icon>verified</mat-icon>
+        </div>
+        <div class="kpi-value">{{ approvedCount }}</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-kpi-card status-suspended">
+      <mat-card-content>
+        <div class="kpi-header">
+          <span>Rejected</span>
+          <mat-icon>block</mat-icon>
+        </div>
+        <div class="kpi-value">{{ rejectedCount }}</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-kpi-card type-users">
+      <mat-card-content>
+        <div class="kpi-header">
+          <span>Total Submissions</span>
+          <mat-icon>corporate_fare</mat-icon>
+        </div>
+        <div class="kpi-value">{{ organizations.length }}</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>Facility Onboarding Queue</mat-card-title>
+      <mat-button-toggle-group [value]="filter" (change)="setFilter($event.value)" class="status-filter-group">
+        <mat-button-toggle value="pending">Pending</mat-button-toggle>
+        <mat-button-toggle value="approved">Approved</mat-button-toggle>
+        <mat-button-toggle value="rejected">Rejected</mat-button-toggle>
+        <mat-button-toggle value="all">All</mat-button-toggle>
+      </mat-button-toggle-group>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (loading) {
+        <div class="loading-state">
+          <mat-spinner diameter="40"></mat-spinner>
+          <span>Loading organization submissions…</span>
+        </div>
+      } @else if (!filteredOrganizations.length) {
+        <div class="empty-state">
+          <mat-icon>inbox</mat-icon>
+          <h3>No organizations in this view</h3>
+          <p>When facilities register, pending approvals will appear here.</p>
+        </div>
+      } @else {
+        <table mat-table [dataSource]="filteredOrganizations" class="org-review-table">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Organization</th>
+            <td mat-cell *matCellDef="let org">
+              <div class="org-name-cell">
+                <strong>{{ org.name }}</strong>
+                @if (org.description) {
+                  <span class="muted">{{ org.description }}</span>
+                }
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="registration">
+            <th mat-header-cell *matHeaderCellDef>Registration</th>
+            <td mat-cell *matCellDef="let org">
+              <div class="stack-cell">
+                <span>{{ org.registrationNumber || '—' }}</span>
+                <span class="muted">{{ org.registrationType || '—' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef>Location</th>
+            <td mat-cell *matCellDef="let org">
+              <div class="stack-cell">
+                <span>{{ org.place || '—' }}</span>
+                <span class="muted">
+                  {{ org.districtName || '—' }}{{ org.stateName ? ', ' + org.stateName : '' }}
+                </span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="contact">
+            <th mat-header-cell *matHeaderCellDef>Contact</th>
+            <td mat-cell *matCellDef="let org">
+              <div class="stack-cell">
+                <span>{{ org.email || '—' }}</span>
+                <span class="muted">{{ org.phoneNumber || '—' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="submitted">
+            <th mat-header-cell *matHeaderCellDef>Submitted</th>
+            <td mat-cell *matCellDef="let org">
+              {{ org.createdAt ? (org.createdAt | date: 'mediumDate') : '—' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let org">
+              <span class="status-chip" [ngClass]="statusChipClass(org.statusId)">
+                {{ statusLabel(org) }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let org">
+              <div class="row-actions">
+                @if (org.statusId === OrgStatus.Pending) {
+                  <button
+                    mat-flat-button
+                    color="primary"
+                    class="approve-btn"
+                    type="button"
+                    matTooltip="Approve organization"
+                    [disabled]="actionLoadingId === org.organizationId"
+                    (click)="approve(org)"
+                  >
+                    <mat-icon>check_circle</mat-icon>
+                    Approve
+                  </button>
+                  <button
+                    mat-stroked-button
+                    color="warn"
+                    type="button"
+                    matTooltip="Reject organization"
+                    [disabled]="actionLoadingId === org.organizationId"
+                    (click)="reject(org)"
+                  >
+                    <mat-icon>cancel</mat-icon>
+                    Reject
+                  </button>
+                } @else {
+                  <span class="muted">No actions</span>
+                }
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

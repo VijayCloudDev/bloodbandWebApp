@@ -37,6 +37,11 @@ export const routes: Routes = [
           .then(m => m.SuperadminDashboardComponent) // System SuperAdmins
       },
       {
+        path: 'system-administration/orgs',
+        loadComponent: () => import('./features/organizations/organization-list/organization-list.component')
+          .then(m => m.OrganizationListComponent)
+      },
+      {
         path: 'profile',
         loadComponent: () => import('./features/users/user-detail/user-detail.component')
           .then(m => m.UserDetailComponent)
